@@ -1,4 +1,4 @@
-/*! Player.js - v0.1.0 - 2017-10-24
+/*! Player.js - v0.1.0 - 2017-11-10
 * http://github.com/embedly/player.js
 * Copyright (c) 2017 Embedly; Licensed BSD */
 (function(window, document){
@@ -411,6 +411,15 @@ playerjs.Player.prototype.ready = function(data){
     this.methods = data.value.methods;
   }
 
+  // Determine any new methods that were passed from receiver; prototype
+  for (var ii = 0, l = this.methods.length; ii < l; ii++) {
+    var methodName = this.methods[ii];
+
+    if (!playerjs.Player.prototype.hasOwnProperty(methodName)) {
+      this[methodName] = createPrototypeFunction(methodName);
+    }
+  }
+
   // set ready.
   this.isReady = true;
   this.loaded = true;
@@ -623,7 +632,7 @@ playerjs.Receiver.prototype.receive = function(e){
   }
 
   // Make sure we have a valid method.
-  if (playerjs.indexOf(playerjs.METHODS.all(), data.method) === -1){
+  if (playerjs.indexOf(this.supported.methods, data.method) === -1){
     this.emit('error', {
       code: 2,
       msg: 'Invalid Method "'+data.method+'"'
