@@ -75,7 +75,7 @@ playerjs.Receiver.prototype.receive = function(e){
   }
 
   // Make sure we have a valid method.
-  if (playerjs.indexOf(playerjs.METHODS.all(), data.method) === -1){
+  if (playerjs.indexOf(this.supported.methods, data.method) === -1){
     this.emit('error', {
       code: 2,
       msg: 'Invalid Method "'+data.method+'"'
