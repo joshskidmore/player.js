@@ -189,6 +189,15 @@ playerjs.Player.prototype.ready = function(data){
     this.methods = data.value.methods;
   }
 
+  // Determine any new methods that were passed from receiver; prototype
+  for (var ii = 0, l = this.methods.length; ii < l; ii++) {
+    var methodName = this.methods[ii];
+
+    if (!playerjs.Player.prototype.hasOwnProperty(methodName)) {
+      this[methodName] = createPrototypeFunction(methodName);
+    }
+  }
+
   // set ready.
   this.isReady = true;
   this.loaded = true;
